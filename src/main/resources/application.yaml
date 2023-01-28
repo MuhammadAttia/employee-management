@@ -1,0 +1,15 @@
+server:
+  port: 8888
+spring:
+  datasource:
+    url: jdbc:h2:mem:emdb;DB_CLOSE_ON_EXIT=FALSE
+    driverClassName: org.h2.Driver
+    username: sa
+    password:
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    defer-datasource-initialization: true
+  h2:
+    console:
+      enabled: true
+      path: /h2
