@@ -1,0 +1,164 @@
+openapi: 3.0.1
+info:
+  title: virtual currency
+  version: 1.0.0
+  description: |
+    Application that employee management
+paths:
+  '/employee':
+    post:
+      operationId: addEmployee
+      summary: 'add new employee'
+      tags:
+        - Employee
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmployeeRequest'
+      responses:
+        '201':
+          description: CREATED
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmployeeResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+
+    get:
+      operationId: getEmployee
+      summary: Get Employee
+      tags:
+        - Employee
+      parameters:
+        - name: employeeId
+          in: header
+          description: Employee Id
+          required: true
+          schema:
+            type: string
+            format: UUID
+      responses:
+        '200':
+          description: SUCCESS
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmployeeResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+
+    put:
+      operationId: updateEmployeeStatus
+      summary: 'Update status of an employees job application'
+      tags:
+        - Employee
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateRequest'
+      responses:
+        '200':
+          description: SUCCESS
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmployeeResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+
+components:
+  schemas:
+    EmployeeRequest:
+      type: object
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        status:
+          type: array
+          items:
+            type: string
+      required:
+        - firstName
+        - lastName
+    EmployeeResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        firstName:
+          type: string
+        lastName:
+          type: string
+        status:
+          type: array
+          items:
+            type: string
+      required:
+        - firstName
+        - lastName
+    UpdateRequest:
+      type: object
+      properties:
+        id:
+          type: string
+        status:
+          type: string
+      required:
+        - id
+        - status
+
+    ErrorDetails:
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        date:
+          type: string
+          format: datetime
+        status:
+          type: string
+        error:
+          type: string
+        uri:
+          type: string
+        message:
+          type: string
