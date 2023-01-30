@@ -1,11 +1,11 @@
-openapi: 3.0.1
+openapi: "3.0.1"
 info:
   title: virtual currency
   version: 1.0.0
   description: |
     Application that employee management
 paths:
-  '/employee':
+  '/employees':
     post:
       operationId: addEmployee
       summary: 'add new employee'
@@ -36,20 +36,20 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorDetails'
-
+  '/employees/{id}':
     get:
       operationId: getEmployee
       summary: Get Employee
       tags:
         - Employee
       parameters:
-        - name: employeeId
-          in: header
+        - name: id
+          in: path
           description: Employee Id
           required: true
           schema:
-            type: string
-            format: UUID
+            type: integer
+            format: int64
       responses:
         '200':
           description: SUCCESS
@@ -75,6 +75,14 @@ paths:
       summary: 'Update status of an employees job application'
       tags:
         - Employee
+      parameters:
+        - name: id
+          in: path
+          description: Employee Id
+          required: true
+          schema:
+            type: integer
+            format: int64
       requestBody:
         required: true
         content:
@@ -103,20 +111,6 @@ paths:
 
 components:
   schemas:
-    EmployeeRequest:
-      type: object
-      properties:
-        firstName:
-          type: string
-        lastName:
-          type: string
-        status:
-          type: array
-          items:
-            type: string
-      required:
-        - firstName
-        - lastName
     EmployeeResponse:
       type: object
       properties:
@@ -127,23 +121,55 @@ components:
           type: string
         lastName:
           type: string
+        age:
+          type: integer
         status:
           type: array
           items:
             type: string
+        contractInfo:
+          $ref: '#/components/schemas/ContractInfo'
+
+    EmployeeRequest:
+      type: object
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        age:
+          type: integer
+        contractInfo:
+          $ref: '#/components/schemas/ContractInfo'
       required:
         - firstName
         - lastName
     UpdateRequest:
       type: object
       properties:
-        id:
+        event:
           type: string
-        status:
-          type: string
+          enum :
+          - BEGIN_CHECK
+          - COMPLETE_INITIAL_WORK_PERMIT_CHECK
+          - FINISH_WORK_PERMIT_CHECK
+          - FINISH_SECURITY_CHECK
+          - ACTIVATE
       required:
-        - id
-        - status
+        - event
+
+    ContractInfo:
+      type: object
+      properties:
+        id:
+          type: integer
+        job_title:
+          type: string
+        job_description:
+          type: string
+        salary:
+          type: number
+
 
     ErrorDetails:
       type: object
