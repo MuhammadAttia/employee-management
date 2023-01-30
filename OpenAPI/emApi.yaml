@@ -1,0 +1,190 @@
+openapi: "3.0.1"
+info:
+  title: Employee Management
+  version: 1.0.0
+  description: |
+    Application that employee management
+paths:
+  '/employees':
+    post:
+      operationId: addEmployee
+      summary: 'add new employee'
+      tags:
+        - Employee
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmployeeRequest'
+      responses:
+        '201':
+          description: CREATED
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmployeeResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+  '/employees/{id}':
+    get:
+      operationId: getEmployee
+      summary: Get Employee
+      tags:
+        - Employee
+      parameters:
+        - name: id
+          in: path
+          description: Employee Id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: SUCCESS
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmployeeResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+
+    put:
+      operationId: updateEmployeeStatus
+      summary: 'Update status of an employees job application'
+      tags:
+        - Employee
+      parameters:
+        - name: id
+          in: path
+          description: Employee Id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateRequest'
+      responses:
+        '200':
+          description: SUCCESS
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmployeeResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+
+components:
+  schemas:
+    EmployeeResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        firstName:
+          type: string
+        lastName:
+          type: string
+        age:
+          type: integer
+        status:
+          type: array
+          items:
+            type: string
+        contractInfo:
+          $ref: '#/components/schemas/ContractInfo'
+
+    EmployeeRequest:
+      type: object
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        age:
+          type: integer
+        contractInfo:
+          $ref: '#/components/schemas/ContractInfo'
+      required:
+        - firstName
+        - lastName
+    UpdateRequest:
+      type: object
+      properties:
+        event:
+          type: string
+          enum :
+          - BEGIN_CHECK
+          - COMPLETE_INITIAL_WORK_PERMIT_CHECK
+          - FINISH_WORK_PERMIT_CHECK
+          - FINISH_SECURITY_CHECK
+          - ACTIVATE
+      required:
+        - event
+
+    ContractInfo:
+      type: object
+      properties:
+        id:
+          type: integer
+        job_title:
+          type: string
+        job_description:
+          type: string
+        salary:
+          type: number
+
+
+    ErrorDetails:
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        date:
+          type: string
+          format: datetime
+        status:
+          type: string
+        error:
+          type: string
+        uri:
+          type: string
+        message:
+          type: string

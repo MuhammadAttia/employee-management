@@ -1,0 +1,1 @@
+INSERT INTO contract_info ( job_title,job_description,salary) VALUES ('Java Developer','Software Engineer',5000);
