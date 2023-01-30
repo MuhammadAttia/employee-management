@@ -1,5 +1,6 @@
 package com.attia.employeemanagement.service;
 
+import com.attia.employeemanagement.exception.BadRequestException;
 import com.attia.employeemanagement.exception.NotFoundException;
 import com.attia.employeemanagement.model.Employee;
 import com.attia.employeemanagement.repository.EmployeeRepository;
@@ -51,18 +52,14 @@ public class EmployeeServiceImpl implements EmployeeService {
     public EmployeeResponse updateEmployeeStatus(Long id, UpdateRequest updateRequest)  {
         final String methodName = "updateEmployeeStatus()";
         LOG.info("Updating empoyeeId:{} status to: {}", id, updateRequest.getEvent());
-       try {
             Optional<Employee> employee = employeeRepository.findById(id);
             if (employee.isPresent()) {
                 boolean accepted = stateMachineService.executeTransition(employee.get(), StateMachineEvents.get(updateRequest.getEvent().getValue()));
                 if (!accepted) {
                     LOG.error("{} Status update failed with event: {}.", methodName,  updateRequest.getEvent());
+                    throw new BadRequestException(String.format("Translation from '%s' with '%s' is not allowed", employee.get().getStatus(), updateRequest.getEvent()));
                 }
             }
-        } catch (Exception e) {
-           LOG.error("{} Error updating employee status: {}", methodName, e.toString());
-            throw e;
-        }
         return getEmployee(id);
     }
 

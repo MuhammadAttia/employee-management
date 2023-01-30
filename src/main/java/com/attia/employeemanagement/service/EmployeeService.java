@@ -7,7 +7,7 @@ import org.openapitools.model.UpdateRequest;
 
 public interface EmployeeService {
 
-     EmployeeResponse addEmployee(EmployeeRequest data);
+    EmployeeResponse addEmployee(EmployeeRequest data);
 
     EmployeeResponse getEmployee(Long id);
 

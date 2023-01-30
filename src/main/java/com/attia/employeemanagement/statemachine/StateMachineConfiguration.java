@@ -22,12 +22,12 @@ public class StateMachineConfiguration extends StateMachineConfigurerAdapter<Sta
     public void configure(StateMachineConfigurationConfigurer<StateMachineStates, StateMachineEvents> config)
             throws Exception {
         config
-            .withPersistence()
+                .withPersistence()
                 .runtimePersister(persister);
         config
-            .withConfiguration()
-            .autoStartup(true)
-            .listener(new StateMachineListener());
+                .withConfiguration()
+                .autoStartup(true)
+                .listener(new StateMachineListener());
     }
 
 
@@ -42,21 +42,21 @@ public class StateMachineConfiguration extends StateMachineConfigurerAdapter<Sta
                 .end(StateMachineStates.ACTIVE)
                 .and()
                 .withStates()
-                    .parent(StateMachineStates.IN_CHECK)
-                    .region("r1")
-                    .initial(StateMachineStates.WORK_PERMIT_CHECK_STARTED)
-                    .end(StateMachineStates.WORK_PERMIT_CHECK_PENDING_VERIFICATION)
+                .parent(StateMachineStates.IN_CHECK)
+                .region("r1")
+                .initial(StateMachineStates.WORK_PERMIT_CHECK_STARTED)
+                .end(StateMachineStates.WORK_PERMIT_CHECK_PENDING_VERIFICATION)
                 .and()
                 .withStates()
-                    .parent(StateMachineStates.IN_CHECK)
-                    .region("r1")
-                    .initial(StateMachineStates.WORK_PERMIT_CHECK_PENDING_VERIFICATION)
-                    .end(StateMachineStates.WORK_PERMIT_CHECK_FINISHED)
+                .parent(StateMachineStates.IN_CHECK)
+                .region("r1")
+                .initial(StateMachineStates.WORK_PERMIT_CHECK_PENDING_VERIFICATION)
+                .end(StateMachineStates.WORK_PERMIT_CHECK_FINISHED)
                 .and()
-                    .withStates()
-                    .parent(StateMachineStates.IN_CHECK)
-                    .initial(StateMachineStates.SECURITY_CHECK_STARTED)
-                    .end(StateMachineStates.SECURITY_CHECK_FINISHED);
+                .withStates()
+                .parent(StateMachineStates.IN_CHECK)
+                .initial(StateMachineStates.SECURITY_CHECK_STARTED)
+                .end(StateMachineStates.SECURITY_CHECK_FINISHED);
     }
 
     @Override
